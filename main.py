@@ -56,56 +56,59 @@ class Alarm(MDApp):
         Clock.unschedule(self.set_volume)
         self.volume = 0
 
+    def change_screen(self):
+        self.root.current = "camera_screen"
+
     def build(self):
         return Builder.load_string('''
 ScreenManager:
+    id: screen_manager
     AlarmScreen:
+        name: 'alarm_screen'
+        id: alarm_screen
+        MDFloatLayout:
+            md_bg_color: 1, 1, 1, 1
+            MDLabel:
+                text: "ALARM CLOCK"
+                font_size: "20sp"
+                pos_hint: {"center_y": .935}
+                halign: "center"
+                bold: True
+            MDIconButton:
+                icon: "plus"
+                pos_hint: {"center_x": .50, "center_y": .50}
+                md_bg_color: 0, 0, 0, 1
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                on_release: app.time_picker()
+            MDLabel:
+                id: alarm_time
+                text: ""
+                pos_hint: {"center_y": .7}
+                halign: "center"
+                font_size: "30sp"
+                bold: True
+            MDRaisedButton:
+                text: "stop"
+                pos_hint: {"center_x": .5, "center_y": .1}
+                md_bg_color: 0, 0, 0, 1
+                on_press: 
+                    app.change_screen()
     CameraScreen:
-<AlarmScreen>:
-    name: 'alarmscreen'
-    MDFloatLayout:
-        md_bg_color: 1, 1, 1, 1
-        MDLabel:
-            text: "ALARM CLOCK"
-            font_size: "20sp"
-            pos_hint: {"center_y": .935}
-            halign: "center"
-            bold: True
+        name: 'camera_screen'
+        id: camera_screen
+        MDFloatLayout:
+        Camera:
+            id: camera
+            resolution: (640, 640)
+            play: True
         MDIconButton:
-            icon: "plus"
-            pos_hint: {"center_x": .50, "center_y": .50}
+            icon: "camera"
+            pos_hint: {"center_x": .50, "center_y": .05}
             md_bg_color: 0, 0, 0, 1
             theme_text_color: "Custom"
             text_color: 1, 1, 1, 1
-            on_release: app.time_picker()
-        MDLabel:
-            id: alarm_time
-            text: ""
-            pos_hint: {"center_y": .7}
-            halign: "center"
-            font_size: "30sp"
-            bold: True
-        MDRaisedButton:
-            text: "stop"
-            pos_hint: {"center_x": .5, "center_y": .1}
-            md_bg_color: 0, 0, 0, 1
-            on_press: 
-                root.manager.current = 'camerascreen'
-                
-<CameraScreen>:
-    name: 'camerascreen'
-    MDFloatLayout:
-    Camera:
-        id: camera
-        resolution: (640, 640)
-        play: True
-    MDIconButton:
-        icon: "camera"
-        pos_hint: {"center_x": .50, "center_y": .05}
-        md_bg_color: 0, 0, 0, 1
-        theme_text_color: "Custom"
-        text_color: 1, 1, 1, 1
-        on_press: camera.export_to_png('selfie.png')
+            on_press: camera.export_to_png('selfie.png')
 '''
 
                                    )
