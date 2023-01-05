@@ -15,11 +15,17 @@ class ImageDetection:
     def __init__(self, image):
         self.model = torch.hub.load('ultralytics/yolov5', 'custom', path='final.pt', force_reload=True)
         self.results = self.model(image)
-        self.results.print() #result 
-        self.results.show() #if you want to see the detection on picture
+        #self.results.print() #result 
+        #self.results.show() #if you want to see the detection on picture
+        
+    def checking(self):
+        if self.results.pandas().xyxy[0].value_counts('name').empty:
+            return False
+        return True
 
 if __name__ == "__main__":
-    ImageDetection("selfie.png") 
+    print(ImageDetection("pic1.jpeg").checking())
+    
     #file "selfie.png" will be automatically generated when you take a selfie from CameraUi.py
     #if you want to test without taking a selfie, change "selfie.png" to "pic1.jpeg" or "pic2.jpg" or "Face2.png".
 
